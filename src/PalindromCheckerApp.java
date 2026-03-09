@@ -1,26 +1,78 @@
-import java.util.Deque;
-import java.util.LinkedList;
 import java.util.Scanner;
 
-public class UseCase7PalindromeCheckerApp {
+class Node {
+    char data;
+    Node next;
 
-    public static boolean isPalindrome(String text) {
+    Node(char data) {
+        this.data = data;
+        this.next = null;
+    }
+}
 
-        Deque<Character> deque = new LinkedList<>();
+public class UseCase8PalindromeCheckerApp {
 
-        // Insert characters into deque
-        for (int i = 0; i < text.length(); i++) {
-            deque.addLast(text.charAt(i));
+    // Create linked list from string
+    public static Node createList(String str) {
+        Node head = null, tail = null;
+
+        for (int i = 0; i < str.length(); i++) {
+            Node newNode = new Node(str.charAt(i));
+
+            if (head == null) {
+                head = newNode;
+                tail = newNode;
+            } else {
+                tail.next = newNode;
+                tail = newNode;
+            }
+        }
+        return head;
+    }
+
+    // Reverse linked list
+    public static Node reverse(Node head) {
+        Node prev = null;
+        Node current = head;
+        Node next;
+
+        while (current != null) {
+            next = current.next;
+            current.next = prev;
+            prev = current;
+            current = next;
         }
 
-        // Compare front and rear characters
-        while (deque.size() > 1) {
-            char first = deque.removeFirst();
-            char last = deque.removeLast();
+        return prev;
+    }
 
-            if (first != last) {
+    // Check palindrome
+    public static boolean isPalindrome(Node head) {
+
+        if (head == null || head.next == null)
+            return true;
+
+        Node slow = head;
+        Node fast = head;
+
+        // Find middle using fast & slow pointer
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        // Reverse second half
+        Node secondHalf = reverse(slow);
+
+        Node firstHalf = head;
+
+        // Compare halves
+        while (secondHalf != null) {
+            if (firstHalf.data != secondHalf.data) {
                 return false;
             }
+            firstHalf = firstHalf.next;
+            secondHalf = secondHalf.next;
         }
 
         return true;
@@ -35,7 +87,9 @@ public class UseCase7PalindromeCheckerApp {
 
         input = input.toLowerCase().replaceAll("\\s+", "");
 
-        if (isPalindrome(input)) {
+        Node head = createList(input);
+
+        if (isPalindrome(head)) {
             System.out.println("The given string is a Palindrome.");
         } else {
             System.out.println("The given string is NOT a Palindrome.");
