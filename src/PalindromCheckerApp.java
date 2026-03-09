@@ -1,39 +1,46 @@
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 public class UseCase7PalindromeCheckerApp {
 
-    public static void main(String[] args) {
+    public static boolean isPalindrome(String text) {
 
-        String original = "madam";
-
-        // Create deque
         Deque<Character> deque = new LinkedList<>();
 
         // Insert characters into deque
-        for (int i = 0; i < original.length(); i++) {
-            deque.addLast(original.charAt(i));
+        for (int i = 0; i < text.length(); i++) {
+            deque.addLast(text.charAt(i));
         }
-
-        boolean isPalindrome = true;
 
         // Compare front and rear characters
         while (deque.size() > 1) {
-
             char first = deque.removeFirst();
             char last = deque.removeLast();
 
             if (first != last) {
-                isPalindrome = false;
-                break;
+                return false;
             }
         }
 
-        // Print result
-        if (isPalindrome) {
-            System.out.println(original + " is a Palindrome");
+        return true;
+    }
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter a string: ");
+        String input = sc.nextLine();
+
+        input = input.toLowerCase().replaceAll("\\s+", "");
+
+        if (isPalindrome(input)) {
+            System.out.println("The given string is a Palindrome.");
         } else {
-            System.out.println(original + " is not a Palindrome");
+            System.out.println("The given string is NOT a Palindrome.");
         }
+
+        sc.close();
     }
 }
